@@ -12,7 +12,6 @@ let timeout;
 
 let delLines = 0;
 let best = 0;
-//let level;
 
 function createBoard(xCount, yCount, contId, itemClass) {  //???????
 
@@ -106,6 +105,8 @@ function go() {
 }
 
 function startNewGame() {
+    document.getElementById('gameOver').style.display = 'none';
+
     clearInterval(int);
     if (document.getElementsByClassName('paused').length) {
         pause();
@@ -614,5 +615,6 @@ function pause() {
 
 function gameOver() {
     clearInterval(int);
-    alert('game over');
+    document.getElementById('gameOver').style.display = 'inline';
+    document.getElementById('newGame2').addEventListener('click', startNewGame);
 }

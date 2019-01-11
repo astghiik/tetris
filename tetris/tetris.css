@@ -17,13 +17,14 @@ body {
 }
 
 #go {
-    margin-left: 27px;
+    margin-top: 5px;
+    margin-left: 29px;
     width: 150px;
     height: 70px;
     line-height: 70px;
     border: 1px solid black;
     border-radius: 4px;
-    background-color: #dc143c;
+    background-color: #e4e4ee;
     text-align: center;
     font-size: 37px;
     font-family: "Lucida Console", Monaco, monospace;
@@ -33,6 +34,42 @@ body {
 
 #go:hover {
     font-size: 43px;
+}
+
+#gameOver {
+    margin-left: 190px;
+    margin-top: 200px;
+    width: 210px;
+    height: 160px;
+    line-height: 70px;
+    border-radius: 4px;
+    background-color: #dc143c;
+    text-align: center;
+    font-size: 25px;
+    font-family: "Lucida Console", Monaco, monospace;
+    position: absolute;
+    display: none;
+}
+
+#newGame2 {
+    margin-top: 5px;
+    margin-left: 39px;
+    width: 130px;
+    height: 60px;
+    line-height: 59px;
+    border: 1px solid black;
+    border-radius: 4px;
+    background-color: #e4e4ee;
+    text-align: center;
+    font-size: 21px;
+    font-family: "Lucida Console", Monaco, monospace;
+    position: absolute;
+    cursor: pointer;
+}
+
+#newGame2:hover {
+    font-size: 24px;
+    font-weight: bold;
 }
 
 .squareItem {
@@ -57,17 +94,12 @@ body {
     border: 1px solid #0000002f;
 }
 
-.paused {
-    background-color: #dc143c;
-    font-family: "Lucida Console", Monaco, monospace;
-}
-
-
 #pause {
     width: 100px;
     height: 30px;
     border: none;
     cursor: pointer;
+    background-color: #e4e4e4;
     border-radius: 5px;
     margin-bottom: 30px;
     font-size: 22px;
@@ -75,11 +107,17 @@ body {
     line-height: 30px;
 }
 
+#pause:hover {
+    font-size: 25px;
+    font-weight: bold;
+}
+
 #newGame {
     width: 100px;
     height: 60px;
     border: none;
     cursor: pointer;
+    background-color: #e4e4e4;
     border-radius: 5px;
     display: block;
     font-size: 22px;
@@ -87,11 +125,6 @@ body {
 }
 
 #newGame:hover {
-    font-size: 25px;
-    font-weight: bold;
-}
-
-#pause:hover {
     font-size: 25px;
     font-weight: bold;
 }
@@ -119,12 +152,13 @@ body {
     font-family: "Lucida Console", Monaco, monospace;
     text-align: center;
 }
+
 #mainContainer {
     width: 440px ;
     background-color: black
 }
 
-.currentBlock, .floor {
+.currentBlock {
     background-color: #dc143c;
 }
 
@@ -134,18 +168,21 @@ body {
 
 
 #levSel {
-    width: 100px;
-    height: 35px;
+    width: 90px;
+    height: 30px;
     background-color: #303030;
     color: white;
     font-family: "Lucida Console", Monaco, monospace;
-    font-size: 22px;
+    font-size: 20px;
     padding: 3px;
-    line-height: 35px;
+    margin-left: 60px;
+    display: block;
 }
 
 #chooseLevel {
+    margin-top: 18px;
     text-align: center;
+    font-size: 17px;
     font-family: "Lucida Console", Monaco, monospace;
     line-height: 35px;
 }
@@ -166,7 +203,7 @@ body {
     font-family: "Lucida Console", Monaco, monospace;
     font-size: 22px;
     padding: 3px;
-    line-height: 35px;
+    line-height: 38px;
 }
 
 #pointsDiv {
@@ -185,7 +222,7 @@ body {
     font-family: "Lucida Console", Monaco, monospace;
     font-size: 22px;
     padding: 3px;
-    line-height: 35px;
+    line-height: 38px;
 }
 
 #bestDiv {
@@ -204,15 +241,7 @@ body {
     font-family: "Lucida Console", Monaco, monospace;
     font-size: 22px;
     padding: 3px;
-    line-height: 35px;
-}
-
-span {
-    margin-left: 22px;
-}
-
-.clean {
-    background-color: #dc143c;
+    line-height: 38px;
 }
 
 .shadow {
