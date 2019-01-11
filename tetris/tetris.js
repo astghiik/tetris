@@ -3,12 +3,16 @@ const yCount = 27;
 
 const mainDiv = document.getElementById('mainContainer');
 const nextDiv = document.getElementById('nextContainer');
+const squareItems = document.getElementsByClassName('squareItem');
+const levSel = document.getElementById('levSel');
+const points = document.getElementById('points');
 
 let int;
-let timeout = 1000;
+let timeout;
 
 let delLines = 0;
-let level = 1;
+let best = 0;
+//let level;
 
 function createBoard(xCount, yCount, contId, itemClass) {  //???????
 
@@ -81,11 +85,37 @@ function showNextBlock() {
 document.getElementById('go').addEventListener('click', go);
 
 function go() {
+    if (fixed.length) {
+        for (let i = 0; i < squareItems.length; i ++) {
+            squareItems[i].classList.remove('fixed');
+        }
+        fixed = [];
+    }
+
+    delLines = 0;
+    points.innerText = 0;
+
     getCurrentBlock();
+    timeout = +levSel.value;
+    document.getElementById('level').innerText = levSel.selectedIndex + 1;
+    levSel.disabled = true;
     int = setInterval(moveDown, timeout);
     document.getElementById('go').removeEventListener('click', go);
-    document.getElementById('go').style.display = 'none';
+    document.getElementById('goDiv').style.display = 'none';
     document.getElementById('pause').addEventListener('click', pause);
+}
+
+function startNewGame() {
+    clearInterval(int);
+    if (document.getElementsByClassName('paused').length) {
+        pause();
+        startNewGame();
+    }
+
+    document.getElementById('pause').removeEventListener('click', pause);
+    document.getElementById('goDiv').style.display = 'inline';
+    levSel.disabled = false;
+    document.getElementById('go').addEventListener('click', go);
 }
 
 function drawItem(block, blockLength = 4, cssClass = 'currentBlock', row = yCount, col = xCount, cont = mainDiv){
@@ -104,9 +134,9 @@ function drawItem(block, blockLength = 4, cssClass = 'currentBlock', row = yCoun
     // if (cont !== nextDiv) showShadow();
 }
 
-//                               SHADOW!!!!!
+//                               SHADOW!!!!!!!!!!!!!!!!
+
 // function showShadow() {
-//     const squareItem = document.getElementById('mainContainer').getElementsByClassName('squareItem');
 //     let floorRow = yCount;
 //     let distance;
 //     let blockLeg = currentBlock[0].slice(0, currentBlock[0].indexOf('-'));
@@ -116,8 +146,8 @@ function drawItem(block, blockLength = 4, cssClass = 'currentBlock', row = yCoun
 //     fixed = fixed.sort((a, b) => +b.slice(0, b.indexOf('-')) - +a.slice(0, a.indexOf('-'))); 
 
    
-//     for (let j = 0; j < squareItem.length; j ++) {
-//         squareItem[j].classList.remove('shadow');
+//     for (let j = 0; j < squareItems.length; j ++) {
+//         squareItems[j].classList.remove('shadow');
 //     }
 
 
@@ -127,8 +157,8 @@ function drawItem(block, blockLength = 4, cssClass = 'currentBlock', row = yCoun
 //         blockLeg = !changed && +blockLeg < +row ? row : blockLeg;
 
 //         if (secondRound) {
-//             // squareItem[(+floorRow - 1) * xCount + +column].classList.add('ban');
-//             squareItem[(+row + distance - 1) * xCount + +column].classList.add('shadow');
+//             // squareItems[(+floorRow - 1) * xCount + +column].classList.add('ban');
+//             squareItems[(+row + distance - 1) * xCount + +column].classList.add('shadow');
 //          }
 
 //         for (let j = 0; !secondRound && j < fixed.length; j ++) {
@@ -155,14 +185,13 @@ function drawItem(block, blockLength = 4, cssClass = 'currentBlock', row = yCoun
 let deletedRows = [];
 let deletedItems = [];
 function cleanLine() {
-    let items = document.getElementsByClassName('squareItem');
     let fixedItems = document.getElementsByClassName('fixed');
 
     for (let i = 0; i < yCount; i ++) {
         let count = 0;
 
         for (let j = i * xCount; j < (i + 1) * xCount; j ++) {
-            if (items[j].classList.contains('fixed')) count ++;
+            if (squareItems[j].classList.contains('fixed')) count ++;
         }
 
         if (count === xCount) { 
@@ -170,15 +199,19 @@ function cleanLine() {
 
             for (let j = i * xCount; j < (i + 1) * xCount; j ++) {
                 fixed = fixed.filter(function(item) {
-                    return item !== items[j].dataset.ij;
+                    return item !== squareItems[j].dataset.ij;
                 });
 
-                items[j].classList.remove('fixed');
+                squareItems[j].classList.remove('fixed');
             }
 
             delLines ++;
-            if (delLines % 2 === 0) passNewLevel();
-            document.getElementById('lines').innerText = `${delLines}`;
+            points.innerText = delLines * (levSel.selectedIndex + 1);
+            if (+points.innerText > best) {
+                best = points.innerText;
+                document.getElementById('best').innerText = best;
+            }
+
             moveDownAfterClean();
         }
     }
@@ -187,19 +220,18 @@ function cleanLine() {
 }
 
 
-function passNewLevel() {
-    level ++;
-    document.getElementById('level').innerText = level;
-    clearInterval(int);
-    timeout -= 100;  // 20%
-    int = setInterval(moveDown, timeout);
-}
+// function passNewLevel() {
+//     level ++;
+//     document.getElementById('level').innerText = level;
+//     clearInterval(int);
+//     timeout -= 100;  // 20%
+//     int = setInterval(moveDown, timeout);
+// }
 
 
 function moveDownAfterClean() {
     
     let fixedItems = document.getElementsByClassName('fixed');
-    let squareItem = document.getElementsByClassName('squareItem');
   //  fixed = [];
 
     for (let i = 0; i < deletedRows.length; i ++) {
@@ -211,13 +243,13 @@ function moveDownAfterClean() {
             let underItemIndex = xCount * (+itemArr[0] + 1) + +itemArr[1];
 
             if (itemArr[0] < deletedRows[i]) {
-                // if (squareItem[underItemIndex].classList.contains('fixed')) {
-                //     fixed.push(squareItem[underItemIndex].dataset.ij);
+                // if (squareItems[underItemIndex].classList.contains('fixed')) {
+                //     fixed.push(squareItems[underItemIndex].dataset.ij);
                 //     continue;
                 // }
-                // squareItem[underItemIndex].classList.add('fixed');
+                // squareItems[underItemIndex].classList.add('fixed');
 
-                fixed.push(squareItem[underItemIndex].dataset.ij);
+                fixed.push(squareItems[underItemIndex].dataset.ij);
                 fixedItems[j].classList.remove('fixed');
            }
         }
@@ -234,8 +266,8 @@ function moveDownAfterClean() {
     // }
 
     // fixed.forEach(function(item) {
-    //     for (let i = 0; i < squareItem.length; i ++) {
-    //         if (squareItem[i].dataset.ij)
+    //     for (let i = 0; i < squareItems.length; i ++) {
+    //         if (squareItems[i].dataset.ij)
     //     }
     // })
 
@@ -569,12 +601,14 @@ function pause() {
     if (!document.getElementsByClassName('paused').length) {
         clearInterval(int);
         document.getElementById('pause').innerText = 'play';
+        document.getElementById('pause').classList.add('paused');
     } else {
         int = setInterval(moveDown, timeout);
         document.getElementById('pause').innerText = 'pause';
+        document.getElementById('pause').classList.remove('paused');
     }
 
-    document.getElementById('pause').classList.toggle('paused');
+    
 }
 
 
