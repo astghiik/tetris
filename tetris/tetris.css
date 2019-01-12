@@ -2,11 +2,8 @@ body {
     background-color: #646464
 }
 
-
-
 #goDiv {
-    margin-left: 190px;
-    margin-top: 200px;
+    margin: 200px 0 0 190px;
     width: 210px;
     height: 160px;
     line-height: 70px;
@@ -19,8 +16,7 @@ body {
 }
 
 #go {
-    margin-top: 5px;
-    margin-left: 29px;
+    margin: 5px 0 0 29px;
     width: 150px;
     height: 70px;
     line-height: 70px;
@@ -39,8 +35,7 @@ body {
 }
 
 #gameOver {
-    margin-left: 190px;
-    margin-top: 200px;
+    margin: 200px 0 0 190px;
     width: 210px;
     height: 160px;
     line-height: 70px;
@@ -54,8 +49,7 @@ body {
 }
 
 #newGame2 {
-    margin-top: 5px;
-    margin-left: 39px;
+    margin: 5px 0 0 39px;
     width: 130px;
     height: 60px;
     line-height: 59px;
@@ -149,8 +143,7 @@ body {
 
 #nextContainer {
     width: 88px;
-    margin-top: 37px;
-    margin-left: 7px;
+    margin: 37px 0 0 7px;
     font-family: "Lucida Console", Monaco, monospace;
     text-align: center;
 }
