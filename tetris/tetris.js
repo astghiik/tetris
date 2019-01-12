@@ -436,9 +436,7 @@ function rotate() {
     drawNewCurrentBlock(block);
 }
 
-document.addEventListener('keydown', action);
-
-function action() {
+function action(event) {
     switch (event.keyCode) {
         case 37:
         moveLeft();
@@ -471,6 +469,7 @@ function go() {
         fixed = [];
     }
 
+    document.addEventListener('keydown', action);
     delLines = 0;
     points.innerText = 0;
 
@@ -492,6 +491,7 @@ function startNewGame() {
         startNewGame();
     }
 
+    document.removeEventListener('keydown', action);
     pause.removeEventListener('click', pauseGame);
     document.getElementById('goDiv').style.display = 'inline';
     levSel.disabled = false;
@@ -514,4 +514,5 @@ function gameOver() {
     clearInterval(int);
     document.getElementById('gameOver').style.display = 'inline';
     document.getElementById('newGame2').addEventListener('click', startNewGame);
+    document.removeEventListener('keydown', action);
 }
