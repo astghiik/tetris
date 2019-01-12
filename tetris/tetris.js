@@ -1,11 +1,12 @@
 const xCount = 20;
-const yCount = 27;
+const yCount = 26;
 
 const mainDiv = document.getElementById('mainContainer');
 const nextDiv = document.getElementById('nextContainer');
 const squareItems = document.getElementsByClassName('squareItem');
 const levSel = document.getElementById('levSel');
 const points = document.getElementById('points');
+const pause = document.getElementById('pause');
 
 let int;
 let timeout;
@@ -60,7 +61,6 @@ function getCurrentBlock() {
 }
 
 function showNextBlock() {
-   // if (!nextCurrentBlock) return;
     let block;
     if (nextCurrentBlock[4] === 'o') {
         block = ['1-1', '1-2', '2-1', '2-2'];
@@ -81,44 +81,6 @@ function showNextBlock() {
     drawItem(block, 4, 'currentBlock', 4, 4, nextDiv);
 }
 
-document.getElementById('go').addEventListener('click', go);
-
-function go() {
-    if (fixed.length) {
-        for (let i = 0; i < squareItems.length; i ++) {
-            squareItems[i].classList.remove('fixed');
-        }
-        fixed = [];
-    }
-
-    delLines = 0;
-    points.innerText = 0;
-
-    getCurrentBlock();
-    timeout = +levSel.value;
-    document.getElementById('level').innerText = levSel.selectedIndex + 1;
-    levSel.disabled = true;
-    int = setInterval(moveDown, timeout);
-    document.getElementById('go').removeEventListener('click', go);
-    document.getElementById('goDiv').style.display = 'none';
-    document.getElementById('pause').addEventListener('click', pause);
-}
-
-function startNewGame() {
-    document.getElementById('gameOver').style.display = 'none';
-
-    clearInterval(int);
-    if (document.getElementsByClassName('paused').length) {
-        pause();
-        startNewGame();
-    }
-
-    document.getElementById('pause').removeEventListener('click', pause);
-    document.getElementById('goDiv').style.display = 'inline';
-    levSel.disabled = false;
-    document.getElementById('go').addEventListener('click', go);
-}
-
 function drawItem(block, blockLength = 4, cssClass = 'currentBlock', row = yCount, col = xCount, cont = mainDiv){
     for (let i = 0; i < blockLength; i ++) {
         for (let j = 0; j < col * row; j ++) {
@@ -132,7 +94,7 @@ function drawItem(block, blockLength = 4, cssClass = 'currentBlock', row = yCoun
             }
         }
     }
-    // if (cont !== nextDiv) showShadow();
+    // if (cont !== nextDiv) showShadow();  !!!!!!!!!
 }
 
 //                               SHADOW!!!!!!!!!!!!!!!!
@@ -186,8 +148,6 @@ function drawItem(block, blockLength = 4, cssClass = 'currentBlock', row = yCoun
 let deletedRows = [];
 let deletedItems = [];
 function cleanLine() {
-    let fixedItems = document.getElementsByClassName('fixed');
-
     for (let i = 0; i < yCount; i ++) {
         let count = 0;
 
@@ -216,40 +176,19 @@ function cleanLine() {
             moveDownAfterClean();
         }
     }
-
-   
 }
 
-
-// function passNewLevel() {
-//     level ++;
-//     document.getElementById('level').innerText = level;
-//     clearInterval(int);
-//     timeout -= 100;  // 20%
-//     int = setInterval(moveDown, timeout);
-// }
-
-
 function moveDownAfterClean() {
-    
     let fixedItems = document.getElementsByClassName('fixed');
-  //  fixed = [];
 
     for (let i = 0; i < deletedRows.length; i ++) {
         fixed = fixed.filter(item => item.slice(0, item.indexOf('-')) > deletedRows[i]);
 
         for (let j = fixedItems.length - 1; j >= 0; j --) {
-        
             let itemArr = fixedItems[j].dataset.ij.split('-');
             let underItemIndex = xCount * (+itemArr[0] + 1) + +itemArr[1];
 
             if (itemArr[0] < deletedRows[i]) {
-                // if (squareItems[underItemIndex].classList.contains('fixed')) {
-                //     fixed.push(squareItems[underItemIndex].dataset.ij);
-                //     continue;
-                // }
-                // squareItems[underItemIndex].classList.add('fixed');
-
                 fixed.push(squareItems[underItemIndex].dataset.ij);
                 fixedItems[j].classList.remove('fixed');
            }
@@ -257,28 +196,11 @@ function moveDownAfterClean() {
     }
 
     deletedRows = [];
-
     drawItem(fixed, fixed.length, 'fixed');
-
-    // for (let i = 0; i < fixedItems.length; i ++) {
-    //     for (let j = 0; j < fixed.length; j ++) {
-    //         if (fixedItems[i].dataset.ij !== fixed)
-    //     }
-    // }
-
-    // fixed.forEach(function(item) {
-    //     for (let i = 0; i < squareItems.length; i ++) {
-    //         if (squareItems[i].dataset.ij)
-    //     }
-    // })
-
-
-   // cleanLine();
 }
 
 
 function nextBlock() {
-
     let crrntBlock = document.getElementsByClassName('currentBlock');
 
     for (let i = 3; i >= 0; i --) {
@@ -287,12 +209,10 @@ function nextBlock() {
     }
 
     getCurrentBlock();
-
 }
 
 
 function isFixedBlock(dir) {
-
     for (let i = 0; i < 4; i ++) {
         let arr = currentBlock[i].split('-');
         
@@ -333,7 +253,7 @@ function drawNewCurrentBlock(block) {
     
 }
 
-function moveLeft() {      // x
+function moveLeft() {
     if (isFixedBlock('left')) return false;   // for rotate check
     let block = [];
 
@@ -347,7 +267,7 @@ function moveLeft() {      // x
     drawNewCurrentBlock(block);
 }
 
-function moveRight() {    // x 
+function moveRight() {
     if (isFixedBlock('right')) return false;
     let block = [];
     
@@ -375,7 +295,6 @@ function moveDown() {
     }
 
     drawItem(currentBlock);
-    
 }
 
 let memory;
@@ -453,7 +372,6 @@ function rotate() {
 
         if (iItem[0] < 0 || iItem[0] >= yCount) return;
 
-        let rotCentCol = +currentBlock[0].slice(currentBlock[0].indexOf('-') + 1);
         if (fixed.indexOf(iItem.join('-')) !== -1) {
             switch (memory) {
                 case 'moved left':
@@ -485,17 +403,6 @@ function rotate() {
                 default:
                 return;
             }
-            // if (memory === 'moved left') {
-            //     moveRight();
-            //     memory = undefined;
-            //     return;
-            // } else if (memory === 'moved right') {
-            //     moveLeft();
-            //     memory = undefined;
-            //     return;
-            // } else {
-            //     return;
-            // }
         }
 
         if(iItem[1] >= xCount) {
@@ -509,55 +416,9 @@ function rotate() {
         } else {
             block[i] = iItem.join('-');
         }
-       // debugger
-        // ??????????????????????????????????????????????????????????????????????????????????????????????????????
-    //     if (iItem[1] >= xCount || (fixed.indexOf(iItem.join('-')) !== -1 && iItem[1] > rotCentCol)) {
-    //      //  debugger
-    //         // if (memory === 'moved right') {
-    //         //     moveLeft();
-    //         //     memory = undefined;
-    //         //     return;
-    //         // } else if (memory === '2nd moved right') {
-    //         //     moveLeft();
-    //         //     memory = undefined;
-    //         //     return;
-    //         // } else if (memory === 'moved left') {
-    //         //     memory = '2nd moved left';
-    //         // } else if (memory !== '2nd moved left') {
-    //         //     memory = 'moved left';
-    //         // }
-
-    //          if (moveLeft() === false) return;
-    //         return rotate();
-    //        // return;
-    //     } else if (iItem[1] <= 0 || (fixed.indexOf(iItem.join('-')) !== -1 && iItem[1] < rotCentCol)) {
-    //         // if (memory === 'moved left') {
-    //         //     moveRight();
-    //         //     memory = undefined;
-    //         //     return;
-    //         // } else if (memory === '2nd moved left') {
-    //         //     moveRight();
-    //         //     memory = undefined;
-    //         //     return;
-    //         // } else if (memory === 'moved right') {
-    //         //     memory = '2nd moved right';
-    //         // } else if (memory !== '2nd moved right') {
-    //         //     memory = 'moved right';
-
-    //         // }
-
-    //          if (moveRight() === false) return;
-    //          return rotate();
-    //      //   return;
-    //     } else {
-    //         block[i] = iItem.join('-');
-    //         memory = undefined;
-    //     }
-
-
      }
 
-    //              'S', 'Z', CHANGE CENTER OF ROTATION
+    //                           'S', 'Z', CHANGE CENTER OF ROTATION
 
     // if (currentBlock[4] === 's' && o[1] === +block[2].slice(block[2].indexOf('-') + 1)) {
     //    // debugger
@@ -576,7 +437,6 @@ function rotate() {
 }
 
 document.addEventListener('keydown', action);
-
 
 function action() {
     switch (event.keyCode) {
@@ -598,20 +458,57 @@ function action() {
     }
 }
 
-function pause() {
-    if (!document.getElementsByClassName('paused').length) {
-        clearInterval(int);
-        document.getElementById('pause').innerText = 'play';
-        document.getElementById('pause').classList.add('paused');
-    } else {
-        int = setInterval(moveDown, timeout);
-        document.getElementById('pause').innerText = 'pause';
-        document.getElementById('pause').classList.remove('paused');
+
+//                           KEYS
+
+document.getElementById('go').addEventListener('click', go);
+
+function go() {
+    if (fixed.length) {
+        for (let i = 0; i < squareItems.length; i ++) {
+            squareItems[i].classList.remove('fixed');
+        }
+        fixed = [];
     }
 
-    
+    delLines = 0;
+    points.innerText = 0;
+
+    getCurrentBlock();
+    timeout = +levSel.value;
+    document.getElementById('level').innerText = levSel.selectedIndex + 1;
+    levSel.disabled = true;
+    int = setInterval(moveDown, timeout);
+    document.getElementById('goDiv').style.display = 'none';
+    pause.addEventListener('click', pauseGame);
 }
 
+function startNewGame() {
+    document.getElementById('gameOver').style.display = 'none';
+
+    clearInterval(int);
+    if (document.getElementsByClassName('paused').length) {
+        pauseGame();
+        startNewGame();
+    }
+
+    pause.removeEventListener('click', pauseGame);
+    document.getElementById('goDiv').style.display = 'inline';
+    levSel.disabled = false;
+    document.getElementById('go').addEventListener('click', go);
+}
+
+function pauseGame() {
+    if (!document.getElementsByClassName('paused').length) {
+        clearInterval(int);
+        pause.innerText = 'play';
+        pause.classList.add('paused');
+    } else {
+        int = setInterval(moveDown, timeout);
+        pause.innerText = 'pause';
+        pause.classList.remove('paused');
+    }  
+}
 
 function gameOver() {
     clearInterval(int);
