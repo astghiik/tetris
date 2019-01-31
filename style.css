@@ -39,23 +39,16 @@
 }
 
 .github, .telegram, .facebook, .instagram, .mail {
-    width: 90px;
-    height: 20px;
-}
-
-.telegram:hover {
-    background-color: white;
-}
-
-.ghl, .tgl, .fbl, .igl, .maill {
     font-family: calibri;
     font-size: 13px;
     color: #d4d4d4;
     text-decoration: none;
+    padding: 3px;
 }
 
-.ghl:hover, .tgl:hover, .fbl:hover, .igl:hover, .maill:hover {
-    color: #ffffff;
+.github:hover, .telegram:hover, .facebook:hover, .instagram:hover, .mail:hover {
+    color: #000000;
+    background-color: #ebebeb;
 }
 
 .sidebar2 {
