@@ -12,26 +12,50 @@
 
 @font-face {
     font-family: consolab;
-    src: url(consolab.ttf);
+    src: url(fonts/consolab.ttf);
 }
 
 @font-face {
     font-family: calibri;
-    src: url(Calibri.ttf);
+    src: url(fonts/Calibri.ttf);
 }
     
 @font-face {
     font-family: consola;
-    src: url(consola.ttf);
+    src: url(fonts/consola.ttf);
 }
 
 .sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     position: fixed;
+    padding: 160px 0 100px 0;
     top: 0;
     left: 0;
     width: 100px;
     height: 100%;
     background-color: #000;
+}
+
+.github, .telegram, .facebook, .instagram, .mail {
+    width: 90px;
+    height: 20px;
+}
+
+.telegram:hover {
+    background-color: white;
+}
+
+.ghl, .tgl, .fbl, .igl, .maill {
+    font-family: calibri;
+    font-size: 13px;
+    color: #d4d4d4;
+    text-decoration: none;
+}
+
+.ghl:hover, .tgl:hover, .fbl:hover, .igl:hover, .maill:hover {
+    color: #ffffff;
 }
 
 .sidebar2 {
