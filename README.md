@@ -1,6 +1,6 @@
 # Tetris
 
-size - 20x26__
-dark interface__
-6 levels__
+size - 20x26 <br />
+dark interface <br />
+6 levels <br />
 play with arrow keys (up arrow - rotation)
