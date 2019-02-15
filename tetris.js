@@ -503,10 +503,12 @@ function pauseGame() {
         clearInterval(int);
         pause.innerText = 'play';
         pause.classList.add('paused');
+        document.removeEventListener('keydown', action);
     } else {
         int = setInterval(moveDown, timeout);
         pause.innerText = 'pause';
         pause.classList.remove('paused');
+        document.addEventListener('keydown', action);
     }  
 }
 
